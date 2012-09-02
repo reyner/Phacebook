@@ -162,6 +162,10 @@ app.get('/buttonpush', function(req, res) {
         console.log('posted:');
         console.log(output);
       });
+      fbres.on('err', function(err) {
+        console.log('error');
+        console.log(err);
+      }
   });
   //res.send("CHATTING IT UP, " + my_user.name + ", with: <ul><li>" + ONLINE.join('</li><li>') + '</li></ul>');
 });
