@@ -60,7 +60,7 @@ app.get('/perms', function(req, res){
 
       fbres.on('end', function() {
         // parse the text to get the access token
-        req.session = {access_token: output.replace(/access_token=/,"").replace(/&expires=\d+$/, "")};
+        req.session.access_token = output.replace(/access_token=/,"").replace(/&expires=\d+$/, "");
 
         // console.log("ACCESS TOKEN:" + access_token)
         res.redirect('/basicinfo');
@@ -96,7 +96,7 @@ app.get('/basicinfo', function(req, res) {
       });
 
       fbres.on('end', function() {
-        req.session = { user:JSON.parse(output), access_token: req.session.access_token};
+        req.session.user = JSON.parse(output);
         res.redirect('/phacebook');
       });
   });
