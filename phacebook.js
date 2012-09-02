@@ -108,6 +108,7 @@ app.get('/phacebook', function(req, res) {
   var locals = {name: my_user.name}
   console.log("user:")
   console.log(JSON.stringify(my_user, undefined, 2));
+  console.log(access_token);
   res.render('index.jade', locals);
   //res.send("CHATTING IT UP, " + my_user.name + ", with: <ul><li>" + ONLINE.join('</li><li>') + '</li></ul>');
 });
