@@ -1,1 +1,9 @@
 A Physical Facebook Platform using the Open Graph API
+
+
+requires
+node
+npm modules:
+	connect
+	express
+	jade

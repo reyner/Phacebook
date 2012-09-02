@@ -23,9 +23,9 @@ app.get('/', function(req, res){
   var redirect_url = 'https://www.facebook.com/dialog/oauth?client_id=' + apiKey +
    '&redirect_uri=' + hostUrl + '/perms' +
    '&scope=publish_actions&state=authed'
-   console.log("REDIRECTIN' From /")
-   console.log(redirect_url);
-   console.log("REQUEST HEADERS:" + JSON.stringify(req.headers));
+  sconsole.log("REDIRECTIN' From /")
+  console.log(redirect_url);
+  console.log("REQUEST HEADERS:" + JSON.stringify(req.headers));
   res.redirect(redirect_url);
 });
 
