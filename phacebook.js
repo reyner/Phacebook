@@ -11,6 +11,10 @@ var hostUrl = 'http://thepaulbooth.com:3000';
 var express = require('express'),
     app = express();
 
+// noduino stuff
+var requirejs = require('requirejs');
+requirejs.config({nodeRequire: require});
+
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
 
@@ -23,7 +27,7 @@ app.get('/', function(req, res){
   var redirect_url = 'https://www.facebook.com/dialog/oauth?client_id=' + apiKey +
    '&redirect_uri=' + hostUrl + '/perms' +
    '&scope=publish_actions&state=authed'
-  sconsole.log("REDIRECTIN' From /")
+  console.log("REDIRECTIN' From /")
   console.log(redirect_url);
   console.log("REQUEST HEADERS:" + JSON.stringify(req.headers));
   res.redirect(redirect_url);
@@ -117,41 +121,45 @@ app.get('/phacebook', function(req, res) {
   //res.send("CHATTING IT UP, " + my_user.name + ", with: <ul><li>" + ONLINE.join('</li><li>') + '</li></ul>');
 });
 
+app.get('/connect', function(req, res) {
+
+  var LEDlist = [];
+
+  var buttonDown = function(){
+    LEDlist[0].setOn();
+    console.log("On!");
+  }
+
+  var buttonUp = function(){
+    LEDlist[0].setOff();
+  }
+
+  requirejs(['public/scripts/libs/Noduino', 'public/scripts/libs/Noduino.Serial', 'public/scripts/libs/Logger'], function (NoduinoObj, NoduinoConnector, Logger) {
+    var Noduino = new NoduinoObj({'debug': true, host: 'http://thepaulbooth.com:300'}, NoduinoConnector, Logger);
+    Noduino.connect(function(err, board) {
+      if (err) { return console.log(err); }
+
+      board.withLED({pin: 13}, function(err, LED) { LEDlist[0] = LED;});
+      board.withAnalogInput({pin:  'A0'}, function(err, AnalogInput) { 
+        AnalogInput.on('change', function(a) {
+          console.log(a);
+          if (a.value == 1023) {
+            //HACK: This is expecting a potentiometer changing signal between 0 and 1023
+            // Button just is an analog input with/without 5V for on/off
+            buttonDown();
+          } else {
+            buttonUp();
+          }
+        });
+      });
+    });
+  });
+
+});
+
 console.log("starting server");
 app.listen(3000);
 console.log("that was cool");
 
 
-var requirejs = require('requirejs');
-requirejs.config({nodeRequire: require});
 
-var LEDlist = [];
-
-var buttonDown = function(){
-  LEDlist[0].setOn();
-  console.log("On!");
-}
-
-var buttonUp = function(){
-  LEDlist[0].setOff();
-}
-
-requirejs(['public/scripts/libs/Noduino', 'public/scripts/libs/Noduino.Serial', 'public/scripts/libs/Logger'], function (NoduinoObj, NoduinoConnector, Logger) {
-  var Noduino = new NoduinoObj({'debug': false}, NoduinoConnector, Logger);
-  Noduino.connect(function(err, board) {
-    if (err) { return console.log(err); }
-
-    board.withLED({pin: 13}, function(err, LED) { LEDlist[0] = LED;});
-    board.withAnalogInput({pin:  'A0'}, function(err, AnalogInput) { 
-      AnalogInput.on('change', function(a) {
-        if (a.value == 1023) {
-          //HACK: This is expecting a potentiometer changing signal between 0 and 1023
-          // Button just is an analog input with/without 5V for on/off
-          buttonDown();
-        } else {
-          buttonUp();
-        }
-      });
-    });
-  });
-});
