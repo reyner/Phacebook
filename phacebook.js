@@ -119,45 +119,88 @@ app.get('/phacebook', function(req, res) {
   console.log("user:")
   console.log(JSON.stringify(req.session.user, undefined, 2));
   console.log(req.session.access_token);
-  res.render('index.jade', locals);
+  if (req.session.tryingtopushbutton) {
+    res.redirect('/buttonpush')
+  } else {
+    res.render('index.jade', locals);
+  }
   //res.send("CHATTING IT UP, " + my_user.name + ", with: <ul><li>" + ONLINE.join('</li><li>') + '</li></ul>');
 });
 
-app.get('/connect', function(req, res) {
-
-  var LEDlist = [];
-
-  var buttonDown = function(){
-    LEDlist[0].setOn();
-    console.log("On!");
+// we got a button push
+app.get('/buttonpush', function(req, res) {
+  if (!req.session.access_token) {
+    console.log("NO ACCESS TOKEN AT button down.")
+    req.session.tryingtopushbutton = true;
+    res.redirect('/'); // Start the auth flow
+    return;
   }
+  req.session.tryingtopushbutton = false;
+  var locals = {name: req.session.user.name, access_token: req.session.access_token}
+  console.log("user:")
+  console.log(JSON.stringify(req.session.user, undefined, 2));
+  console.log(req.session.access_token);
+  var options = {
+      host: 'graph.facebook.com',
+      port: 443,
+      path: '/me/thephantomphacebook:push?button=http://thepaulbooth.com:3000/objects/button.html&access_token=' + req.session.access_token
+    };
+  https.post(options, function(fbres) {
+    // console.log('CHATSTATUS: ' + fbres.statusCode);
+    //   console.log('HEADERS: ' + JSON.stringify(fbres.headers));
 
-  var buttonUp = function(){
-    LEDlist[0].setOff();
-  }
-
-  requirejs(['public/scripts/libs/Noduino', 'public/scripts/libs/Noduino.Serial', 'public/scripts/libs/Logger'], function (NoduinoObj, NoduinoConnector, Logger) {
-    var Noduino = new NoduinoObj({'debug': true, host: 'http://thepaulbooth.com:300'}, NoduinoConnector, Logger);
-    Noduino.connect(function(err, board) {
-      if (err) { return console.log(err); }
-
-      board.withLED({pin: 13}, function(err, LED) { LEDlist[0] = LED;});
-      board.withAnalogInput({pin:  'A0'}, function(err, AnalogInput) { 
-        AnalogInput.on('change', function(a) {
-          console.log(a);
-          if (a.value == 1023) {
-            //HACK: This is expecting a potentiometer changing signal between 0 and 1023
-            // Button just is an analog input with/without 5V for on/off
-            buttonDown();
-          } else {
-            buttonUp();
-          }
-        });
+      var output = '';
+      fbres.on('data', function (chunk) {
+          //console.log("CHUNK:" + chunk);
+          output += chunk;
       });
-    });
-  });
 
+      fbres.on('end', function() {
+        console.log('posted:');
+        console.log(output);
+      });
+  });
+  //res.send("CHATTING IT UP, " + my_user.name + ", with: <ul><li>" + ONLINE.join('</li><li>') + '</li></ul>');
 });
+
+// this breaks the server - need an arduino attached to server :(
+// app.get('/connect', function(req, res) {
+
+//   var LEDlist = [];
+
+//   var buttonDown = function(){
+//     LEDlist[0].setOn();
+//     console.log("On!");
+//   }
+
+//   var buttonUp = function(){
+//     LEDlist[0].setOff();
+//   }
+
+//   requirejs(['public/scripts/libs/Noduino', 'public/scripts/libs/Noduino.Serial', 'public/scripts/libs/Logger'], function (NoduinoObj, NoduinoConnector, Logger) {
+//     var Noduino = new NoduinoObj({'debug': true, host: 'http://thepaulbooth.com:300'}, NoduinoConnector, Logger);
+//     Noduino.connect(function(err, board) {
+//       if (err) { return console.log(err); }
+
+//       board.withLED({pin: 13}, function(err, LED) { LEDlist[0] = LED;});
+//       board.withAnalogInput({pin:  'A0'}, function(err, AnalogInput) { 
+//         AnalogInput.on('change', function(a) {
+//           console.log(a);
+//           if (a.value == 1023) {
+//             //HACK: This is expecting a potentiometer changing signal between 0 and 1023
+//             // Button just is an analog input with/without 5V for on/off
+//             buttonDown();
+//           } else {
+//             buttonUp();
+//           }
+//         });
+//       });
+//     });
+//   });
+
+// });
+
+
 
 console.log("starting server");
 app.listen(3000);
