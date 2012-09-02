@@ -134,6 +134,7 @@ app.get('/buttonpush', function(req, res) {
     console.log("NO ACCESS TOKEN AT button down.")
     req.session.tryingtopushbutton = true;
     res.redirect('/'); // Start the auth flow
+    console.log("redirected away!");
     return;
   }
   req.session.tryingtopushbutton = false;
