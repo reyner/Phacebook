@@ -6,39 +6,6 @@
   <meta property="og:url"    content="http://thepaulbooth.com/phacebook/button.html" /> 
   <meta property="og:title"  content="Arduino Button" /> 
   <meta property="og:image"  content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png" />
-  <script type="text/javascript">
-
-  function getParameterByName(name)
-  {
-    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-    var regexS = "[\\?&]" + name + "=([^&#]*)";
-    var regex = new RegExp(regexS);
-    var results = regex.exec(window.location.search);
-    if(results == null)
-      return "";
-    else
-      return decodeURIComponent(results[1].replace(/\+/g, " "));
-  }
-
-  // posts our Push action to the FACEPAGES
-  function postPush()
-  {
-    var access_token = getParameterByName('access_token');
-      FB.api(
-        '/me/thephantomphacebook:push',
-        'post',
-        { button: 'http://thepaulbooth.com/phacebook/button.html',
-        access_token: 'AAAFKrbEO47MBAIAtrIihneiQ1vG89f92PIaZB8erZCCKeepDpHDDZBPMDBfEx0TLjZC2AVaLeCtxsI50sV3FV2ATPXSZCy7FIG0FI8Jg5YgZDZD' },
-        function(response) {
-           if (!response || response.error) {
-              //alert('Error occured');
-              console.log(JSON.stringify(response.error, undefined, 2));
-           } else {
-              alert('Push was successful! Action ID: ' + response.id);
-           }
-        });
-  }
-  </script>
   </head>
 <body>
   <div id="fb-root"></div>
@@ -67,9 +34,5 @@
          src="https://dlnmh9ip6v2uc.cloudfront.net/images/products/9/9/5/0/09950-01.jpg" 
          width="550"/>
   </p>
-  <br>
-  <form>
-    <input type="button" value="PUSH DAT BUTTON" onclick="postPush()" />
-  </form>
 </body>
 </html> 

@@ -105,7 +105,7 @@ app.get('/phacebook', function(req, res) {
     res.redirect('/'); // Start the auth flow
     return;
   }
-  var locals = {name: my_user.name}
+  var locals = {name: my_user.name, access_token: access_token}
   console.log("user:")
   console.log(JSON.stringify(my_user, undefined, 2));
   console.log(access_token);
@@ -113,10 +113,5 @@ app.get('/phacebook', function(req, res) {
   //res.send("CHATTING IT UP, " + my_user.name + ", with: <ul><li>" + ONLINE.join('</li><li>') + '</li></ul>');
 });
 
-app.get('/button', function(req, res) {
-  console.log("BUTTON REQUESTED.");
-  console.log(access_token);
-  res.redirect('/objects/button.html?access_token=' + access_token);
-});
 
 app.listen(3000);
