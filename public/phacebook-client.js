@@ -16,7 +16,7 @@ function postPush(access_token)
     FB.api(
       '/me/thephantomphacebook:push',
       'post',
-      { button: 'http://thepaulbooth.com/phacebook/button.html',
+      { button: 'http://thepaulbooth.com:3000/objects/button.html',
       access_token: access_token },
       function(response) {
          if (!response || response.error) {
