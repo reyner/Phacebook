@@ -129,6 +129,7 @@ app.get('/phacebook', function(req, res) {
 
 // we got a button push
 app.get('/buttonpush', function(req, res) {
+  console.log('trying button  push')
   if (!req.session.access_token) {
     console.log("NO ACCESS TOKEN AT button down.")
     req.session.tryingtopushbutton = true;
@@ -143,9 +144,10 @@ app.get('/buttonpush', function(req, res) {
   var options = {
       host: 'graph.facebook.com',
       port: 443,
+      method: 'POST',
       path: '/me/thephantomphacebook:push?button=http://thepaulbooth.com:3000/objects/button.html&access_token=' + req.session.access_token
     };
-  https.post(options, function(fbres) {
+  https.request(options, function(fbres) {
     // console.log('CHATSTATUS: ' + fbres.statusCode);
     //   console.log('HEADERS: ' + JSON.stringify(fbres.headers));
 
