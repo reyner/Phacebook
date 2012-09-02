@@ -15,12 +15,14 @@ var express = require('express'),
 var requirejs = require('requirejs');
 requirejs.config({nodeRequire: require});
 
-app.set('views', __dirname + '/views');
-app.use(express.static(__dirname + '/public'));
+
 
 var MemoryStore = require('connect').session.MemoryStore;
 app.use(express.cookieParser());
 app.use(express.session({ secret: "phacebook", store: new MemoryStore({ reapInterval:  60000 * 10 })}));
+
+app.set('views', __dirname + '/views');
+app.use(express.static(__dirname + '/public'));
 
 // First part of Facebook auth dance
 app.get('/', function(req, res){
