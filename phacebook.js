@@ -113,10 +113,5 @@ app.get('/phacebook', function(req, res) {
   //res.send("CHATTING IT UP, " + my_user.name + ", with: <ul><li>" + ONLINE.join('</li><li>') + '</li></ul>');
 });
 
-app.get('/button', function(req, res) {
-  console.log("BUTTON REQUESTED.");
-  console.log(access_token);
-  res.redirect('/objects/button.html?access_token=' + access_token);
-});
 
 app.listen(3000);
