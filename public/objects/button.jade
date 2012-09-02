@@ -3,17 +3,18 @@
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# thephantomphacebook: http://ogp.me/ns/fb/thephantomphacebook#">
   <meta property="fb:app_id" content="363584837051315" /> 
   <meta property="og:type"   content="thephantomphacebook:button" /> 
-  <meta property="og:url"    content="http://thepaulbooth.com/phacebook/Button.html" /> 
+  <meta property="og:url"    content="http://thepaulbooth.com/phacebook/button" /> 
   <meta property="og:title"  content="Arduino Button" /> 
   <meta property="og:image"  content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png" />
   <script type="text/javascript">
   // posts our Push action to the FACEPAGES
   function postPush()
   {
+      
       FB.api(
-        '/me/thephantomphacebook:push?access_token=AAAFKrbEO47MBAIAtrIihneiQ1vG89f92PIaZB8erZCCKeepDpHDDZBPMDBfEx0TLjZC2AVaLeCtxsI50sV3FV2ATPXSZCy7FIG0FI8Jg5YgZDZD',
+        '/me/thephantomphacebook:push?access_token=',
         'post',
-        { button: 'http://thepaulbooth.com/phacebook/Button.html' },
+        { button: 'http://thepaulbooth.com/phacebook/button' },
         function(response) {
            if (!response || response.error) {
               //alert('Error occured');

@@ -6,7 +6,7 @@ var my_user = null; // The current Facebook user, so we don't request a bunch
 var argv = process.argv;
 var https = require('https');
 
-var hostUrl = 'http://localhost:3000';
+var hostUrl = 'http://thepaulbooth.com:3000';
 
 var express = require('express'),
     app = express();
@@ -111,6 +111,12 @@ app.get('/phacebook', function(req, res) {
   console.log(access_token);
   res.render('index.jade', locals);
   //res.send("CHATTING IT UP, " + my_user.name + ", with: <ul><li>" + ONLINE.join('</li><li>') + '</li></ul>');
+});
+
+app.get('/button', function(req, res) {
+  console.log("BUTTON REQUESTED.");
+  console.log(access_token);
+  res.redirect('/objects/button.html?access_token=' + access_token);
 });
 
 app.listen(3000);
