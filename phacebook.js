@@ -109,7 +109,7 @@ app.get('/phacebook', function(req, res) {
     res.redirect('/'); // Start the auth flow
     return;
   }
-  var locals = {name: my_user.name, access_token: req.session.access_token}
+  var locals = {name: req.session.user.name, access_token: req.session.access_token}
   console.log("user:")
   console.log(JSON.stringify(my_user, undefined, 2));
   console.log(req.session.access_token);
