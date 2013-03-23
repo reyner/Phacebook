@@ -1,17 +1,12 @@
 {
-  "author": "Sebastian Müller <c@semu.mp>",
-  "name": "noduino",
-  "description": "Arduino framework for fuck*ng mad scientists",
+  "name": "application-name",
   "version": "0.0.1",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/semu/noduino.git"
+  "private": true,
+  "scripts": {
+    "start": "node app"
   },
   "dependencies": {
-    "serialport": "*",
-    "colors": "*",
-    "kickstart": "*",
-    "socket.io": "*",
-    "requirejs": "*"
+    "express": "3.0.6",
+    "jade": "*"
   }
 }
