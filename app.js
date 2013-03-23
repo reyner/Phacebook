@@ -71,10 +71,12 @@ app.get('/buttonpush', facebookGetUser(), function(req, res) {
       fbres.on('end', function() {
         console.log('posted:');
         console.log(output);
+        res.send(output);
       });
       fbres.on('err', function(err) {
         console.log('error');
         console.log(err);
+        res.send(err);
       });
   });
 });
