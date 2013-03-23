@@ -56,7 +56,7 @@ app.get('/buttonpush', facebookGetUser(), function(req, res) {
       host: 'graph.facebook.com',
       port: 443,
       method: 'POST',
-      path: '/me/thephantomphacebook:push?button=http://reyner.be/trouble/button.html&access_token=' + req.session.access_token
+      path: '/me/thephantomphacebook:push?button=http://fathomless-shore-6512.herokuapp.com/objects/button.html&access_token=' + req.session.access_token
     };
   https.request(options, function(fbres) {
      console.log('STATUS: ' + fbres.statusCode);
