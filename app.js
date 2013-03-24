@@ -3,7 +3,8 @@ var express = require('express')
   , http = require('http')
   , https = require('https')
   , path = require('path')
-  , Facebook = require('facebook-node-sdk');
+  , Facebook = require('facebook-node-sdk')
+  , OpenGraph = require('facebook-open-graph');
 
 var app = express();
 
@@ -25,6 +26,8 @@ app.configure(function(){
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
+
+var openGraph = new OpenGraph('thephantomphacebook');
 
 function facebookGetUser() {
   return function(req, res, next) {
@@ -51,33 +54,11 @@ app.get('/login', Facebook.loginRequired(), function(req, res){
 });
 
 app.get('/buttonpush', facebookGetUser(), function(req, res) {
-  console.log('trying button push');
-  var options = {
-      host: 'graph.facebook.com',
-      port: 443,
-      method: 'POST',
-      path: '/me/thephantomphacebook:push?button=http://fathomless-shore-6512.herokuapp.com/objects/button.html&access_token=' + req.session.access_token
-    };
-  https.request(options, function(fbres) {
-     console.log('STATUS: ' + fbres.statusCode);
-     console.log('HEADERS: ' + JSON.stringify(fbres.headers));
-
-      var output = '';
-      fbres.on('data', function (chunk) {
-          //console.log("CHUNK:" + chunk);
-          output += chunk;
-      });
-
-      fbres.on('end', function() {
-        console.log('posted:');
-        console.log(output);
-        res.send(output);
-      });
-      fbres.on('err', function(err) {
-        console.log('error');
-        console.log(err);
-        res.send(err);
-      });
+  // enable fb:explicitly_shared
+  var options = true;
+  // the options parameter may be omitted if you have nothing to put in there
+  openGraph.publish('151116079', req.session.access_token ,'push','button','http://fathomless-shore-6512.herokuapp.com/objects/button.html',options,function(err,response){
+    res.send("success");
   });
 });
 
